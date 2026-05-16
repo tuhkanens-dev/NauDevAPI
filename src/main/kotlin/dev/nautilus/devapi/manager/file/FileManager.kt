@@ -5,6 +5,7 @@ import dev.nautilus.devapi.manager.instance.InstanceManager
 import dev.nautilus.devapi.manager.file.api.FileAPI
 import dev.nautilus.devapi.manager.instance.api.InstanceAPI
 import org.bukkit.configuration.file.YamlConfiguration
+import java.io.File
 import java.nio.file.Path
 import java.util.concurrent.ConcurrentHashMap
 import java.util.jar.JarFile
@@ -21,15 +22,15 @@ class FileManager : FileAPI {
     }
 
     override fun saveResource(fileName: String, resourcePath: String) {
-        val fullResourcePath = Path.of(resourcePath, fileName).toString()
-        val targetFile = dataFolder.resolve(fullResourcePath)
+        val jarPath = "$resourcePath/$fileName"
+        val targetFile = dataFolder.resolve(jarPath)
 
         targetFile.parentFile.mkdirs()
 
         if (!targetFile.exists()) {
-            plugin.getResource(fullResourcePath)?.use { input ->
+            plugin.getResource(jarPath)?.use { input ->
                 targetFile.writeBytes(input.readBytes())
-            } ?: plugin.logger.warning("Resource '$fullResourcePath' not found in JAR!")
+            } ?: plugin.logger.warning("Resource '$jarPath' not found in JAR!")
         }
     }
 
@@ -51,31 +52,28 @@ class FileManager : FileAPI {
         }
     }
 
-    override fun getResource(fileName: String, resourcePath: String): YamlConfiguration {
-        val path = Path.of(resourcePath, fileName).toString()
-
-        return fileCache.getOrPut(path) {
-            val file = dataFolder.resolve(path)
+    private fun getResourceResolve(file: File, jarPath: String): YamlConfiguration {
+        return fileCache.getOrPut(jarPath) {
             if (file.exists()) {
                 YamlConfiguration.loadConfiguration(file)
             } else {
-                val input = plugin.getResource(path)
-                    ?: throw IllegalStateException("Resource '$path' not found!")
+                val input = plugin.getResource(jarPath)
+                    ?: throw IllegalStateException("Resource '$jarPath' not found!")
                 input.reader().use { YamlConfiguration.loadConfiguration(it) }
             }
         }
     }
 
+    override fun getResource(fileName: String, resourcePath: String): YamlConfiguration {
+        val jarPath = "$resourcePath/$fileName"
+        val file = dataFolder.resolve(jarPath)
+
+        return getResourceResolve(file, jarPath)
+    }
+
     override fun getResource(fileName: String): YamlConfiguration {
-        return fileCache.getOrPut(fileName) {
-            val file = dataFolder.resolve(fileName)
-            if (file.exists()) {
-                YamlConfiguration.loadConfiguration(file)
-            } else {
-                val input = plugin.getResource(fileName)
-                    ?: throw IllegalStateException("Resource '$fileName' not found!")
-                input.reader().use { YamlConfiguration.loadConfiguration(it) }
-            }
-        }
+        val file = dataFolder.resolve(fileName)
+
+        return getResourceResolve(file, fileName)
     }
 }
