@@ -7,6 +7,10 @@ object NauDevAPI {
 
     val apis = ConcurrentHashMap<KClass<*>, Any>()
 
+    fun setup() {
+        NauDevAPILoader.setup()
+    }
+
     inline fun <reified T : Any> registerAPI(implementation: T) {
         apis[T::class] = implementation
     }

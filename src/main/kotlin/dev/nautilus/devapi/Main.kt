@@ -14,20 +14,10 @@ import org.bukkit.plugin.java.JavaPlugin
 class Main : JavaPlugin() {
 
     override fun onEnable() {
-        setupAPI()
+        // Plugin enable logic
     }
 
     override fun onDisable() {
         // Plugin shutdown logic
-    }
-
-    private fun setupAPI() {
-        NauDevAPI.registerAPI<InstanceAPI>(InstanceManager())
-        NauDevAPI.registerAPI<LangFileAPI>(LangFileManager())
-        NauDevAPI.registerAPI<FileAPI>(FileManager())
-    }
-
-    private fun setupFeatures() {
-        NauFeatureAPI.registerFeature(PathsFeature())
     }
 }
