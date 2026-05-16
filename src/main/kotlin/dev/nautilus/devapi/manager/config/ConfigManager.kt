@@ -23,7 +23,7 @@ class ConfigManager : ConfigAPI {
         NauDevAPI.getAPI<LangAPI>().setCurrentLanguage(lang)
     }
 
-    override fun getConfig(): FileConfiguration {
+    override fun getPluginConfig(): FileConfiguration {
         return pluginConfig
     }
 

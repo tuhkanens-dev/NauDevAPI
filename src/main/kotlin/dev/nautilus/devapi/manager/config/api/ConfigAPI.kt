@@ -4,5 +4,5 @@ import org.bukkit.configuration.file.FileConfiguration
 
 interface ConfigAPI {
     fun loadConfig()
-    fun getConfig(): FileConfiguration
+    fun getPluginConfig(): FileConfiguration
 }
