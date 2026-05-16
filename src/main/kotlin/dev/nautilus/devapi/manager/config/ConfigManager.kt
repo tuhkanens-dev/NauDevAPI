@@ -9,7 +9,7 @@ import org.bukkit.configuration.file.FileConfiguration
 class ConfigManager : ConfigAPI {
 
     private val plugin get() = NauDevAPI.getAPI<InstanceAPI>().getInstance()
-    private val pluginConfig get() = plugin.config
+    private val cfg get() = plugin.config
 
     override fun loadConfig() {
         plugin.saveDefaultConfig()
@@ -17,14 +17,14 @@ class ConfigManager : ConfigAPI {
     }
 
     private fun setCurrentLanguage() {
-        val lang = pluginConfig.getString("language")
+        val lang = cfg.getString("language")
             ?: throw IllegalStateException("'language' not found in config.yml!")
 
         NauDevAPI.getAPI<LangAPI>().setCurrentLanguage(lang)
     }
 
     override fun getPluginConfig(): FileConfiguration {
-        return pluginConfig
+        return cfg
     }
 
 }
