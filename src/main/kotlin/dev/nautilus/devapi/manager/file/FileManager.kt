@@ -25,9 +25,12 @@ class FileManager : FileAPI {
         val jarPath = "$resourcePath/$fileName"
         val targetFile = dataFolder.resolve(jarPath)
 
+        plugin.logger.info("jarPath='$jarPath' targetFile='${targetFile.absolutePath}'")
+
         targetFile.parentFile.mkdirs()
 
         if (!targetFile.exists()) {
+            plugin.logger.info("Trying getResource('$jarPath')")
             plugin.getResource(jarPath)?.use { input ->
                 targetFile.writeBytes(input.readBytes())
             } ?: plugin.logger.warning("Resource '$jarPath' not found in JAR!")
