@@ -34,13 +34,20 @@ class FileManager : FileAPI {
     }
 
     override fun saveResources(resourcePath: String) {
-        JarFile(getJarPath()).use { jar ->
-            jar.entries().asSequence()
+        val jarPath = getJarPath()
+        plugin.logger.info("JAR path: $jarPath")
+
+        JarFile(jarPath).use { jar ->
+            val entries = jar.entries().asSequence()
                 .filter { !it.isDirectory && it.name.startsWith("$resourcePath/") }
-                .forEach { entry ->
-                    val fileName = entry.name.removePrefix("$resourcePath/")
-                    saveResource(fileName, resourcePath)
-                }
+                .toList()
+
+            plugin.logger.info("Found ${entries.size} entries for '$resourcePath/'")
+            entries.forEach { entry ->
+                plugin.logger.info("Processing entry: ${entry.name}")
+                val fileName = entry.name.removePrefix("$resourcePath/")
+                saveResource(fileName, resourcePath)
+            }
         }
     }
 
