@@ -1,6 +1,8 @@
 package dev.nautilus.devapi
 
 import dev.nautilus.devapi.core.NauDevAPI
+import dev.nautilus.devapi.core.NauFeatureAPI
+import dev.nautilus.devapi.manager.features.PathsFeature
 import dev.nautilus.devapi.manager.file.FileManager
 import dev.nautilus.devapi.manager.file.api.FileAPI
 import dev.nautilus.devapi.manager.instance.InstanceManager
@@ -23,5 +25,9 @@ class Main : JavaPlugin() {
         NauDevAPI.registerAPI<InstanceAPI>(InstanceManager())
         NauDevAPI.registerAPI<LangFileAPI>(LangFileManager())
         NauDevAPI.registerAPI<FileAPI>(FileManager())
+    }
+
+    private fun setupFeatures() {
+        NauFeatureAPI.registerFeature(PathsFeature())
     }
 }
