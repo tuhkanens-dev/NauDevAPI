@@ -8,8 +8,8 @@ import org.bukkit.configuration.file.FileConfiguration
 
 class ConfigManager : ConfigAPI {
 
-    private val plugin = NauDevAPI.getAPI<InstanceAPI>().getInstance()
-    private val config = plugin.config
+    private val plugin get() = NauDevAPI.getAPI<InstanceAPI>().getInstance()
+    private val config get() = plugin.config
 
     override fun loadConfig() {
         plugin.saveDefaultConfig()

@@ -11,8 +11,8 @@ import org.bukkit.configuration.file.YamlConfiguration
 
 class LangFileManager : LangFileAPI {
 
-    private val plugin = NauDevAPI.getAPI<InstanceAPI>().getInstance()
-    private val dataFolder = plugin.dataFolder
+    private val plugin get() = NauDevAPI.getAPI<InstanceAPI>().getInstance()
+    private val dataFolder get() = plugin.dataFolder
 
     private var langFiles: MutableList<LangData> = mutableListOf()
     private val langFolder get() = NauFeatureAPI.getFeature<PathsFeature>().getPaths().langFolder
