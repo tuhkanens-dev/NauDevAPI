@@ -1,7 +1,9 @@
 package dev.nautilus.devapi.manager.file
 
-import dev.nautilus.devapi.manager.core.InstanceManager
+import dev.nautilus.devapi.core.NauDevAPI
+import dev.nautilus.devapi.manager.instance.InstanceManager
 import dev.nautilus.devapi.manager.file.api.FileAPI
+import dev.nautilus.devapi.manager.instance.api.InstanceAPI
 import org.bukkit.configuration.file.YamlConfiguration
 import java.nio.file.Path
 import java.util.concurrent.ConcurrentHashMap
@@ -9,7 +11,7 @@ import java.util.jar.JarFile
 
 class FileManager : FileAPI {
 
-    private val plugin = InstanceManager.getInstance()
+    private val plugin = NauDevAPI.getAPI<InstanceAPI>().getInstance()
     private val dataFolder = plugin.dataFolder
 
     private val fileCache = ConcurrentHashMap<String, YamlConfiguration>()

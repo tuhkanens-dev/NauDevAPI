@@ -1,7 +1,8 @@
 package dev.nautilus.devapi.manager.lang
 
-import dev.nautilus.devapi.manager.core.InstanceManager
-import dev.nautilus.devapi.manager.core.NauDevAPI
+import dev.nautilus.devapi.manager.instance.InstanceManager
+import dev.nautilus.devapi.core.NauDevAPI
+import dev.nautilus.devapi.manager.instance.api.InstanceAPI
 import dev.nautilus.devapi.manager.lang.api.LangFileAPI
 import dev.nautilus.devapi.manager.lang.api.LangAPI
 import dev.nautilus.devapi.manager.lang.data.LangData
@@ -15,7 +16,7 @@ class LangManager : LangAPI {
         private var CURRENT_LANG_FILE: LangData? = null
     }
 
-    private val miniMessage = InstanceManager.getMiniMessages()
+    private val miniMessage = NauDevAPI.getAPI<InstanceAPI>().getMiniMessages()
 
     override fun getString(key: String): String {
         return getCurrentLanguage().getString(key) ?: ""

@@ -1,4 +1,4 @@
-package dev.nautilus.devapi.manager.core
+package dev.nautilus.devapi.core
 
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass

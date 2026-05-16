@@ -1,22 +1,23 @@
-package dev.nautilus.devapi.manager.core
+package dev.nautilus.devapi.manager.instance
 
+import dev.nautilus.devapi.manager.instance.api.InstanceAPI
 import net.kyori.adventure.text.minimessage.MiniMessage
 import org.bukkit.plugin.java.JavaPlugin
 
-object InstanceManager {
+class InstanceManager : InstanceAPI {
 
     private lateinit var instance: JavaPlugin
     private val miniMessage: MiniMessage = MiniMessage.miniMessage()
 
-    fun setInstance(instance: JavaPlugin) {
+    override fun setInstance(instance: JavaPlugin) {
         this.instance = instance
     }
 
-    fun getInstance(): JavaPlugin {
+    override fun getInstance(): JavaPlugin {
         return instance
     }
 
-    fun getMiniMessages(): MiniMessage {
+    override fun getMiniMessages(): MiniMessage {
         return miniMessage
     }
 

@@ -1,6 +1,6 @@
 package dev.nautilus.devapi.manager.features.feature
 
-import dev.nautilus.devapi.manager.features.NauFeatureAPI
+import dev.nautilus.devapi.core.NauFeatureAPI
 import dev.nautilus.devapi.manager.features.api.FeatureAPI
 import dev.nautilus.devapi.manager.features.data.FeaturePaths
 
