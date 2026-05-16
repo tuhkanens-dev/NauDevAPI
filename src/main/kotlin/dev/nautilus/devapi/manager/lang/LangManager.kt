@@ -15,7 +15,7 @@ class LangManager : LangAPI {
         private var CURRENT_LANG_FILE: LangData? = null
     }
 
-    private val miniMessage = NauDevAPI.getAPI<InstanceAPI>().getMiniMessages()
+    private val miniMessage get() = NauDevAPI.getAPI<InstanceAPI>().getMiniMessages()
 
     override fun getString(key: String): String {
         return getCurrentLanguage().getString(key) ?: ""
