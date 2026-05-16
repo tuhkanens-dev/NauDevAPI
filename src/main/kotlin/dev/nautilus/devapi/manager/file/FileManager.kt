@@ -24,7 +24,7 @@ class FileManager : FileAPI {
         val resourcePath = Path.of(resourcePath, fileName).toString()
         val targetFile = dataFolder.resolve(resourcePath)
 
-        targetFile.parentFile.mkdir()
+        targetFile.parentFile.mkdirs()
 
         if (!targetFile.exists()) {
             plugin.getResource(resourcePath)?.use { input ->
