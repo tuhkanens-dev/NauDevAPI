@@ -21,15 +21,15 @@ class FileManager : FileAPI {
     }
 
     override fun saveResource(fileName: String, resourcePath: String) {
-        val resourcePath = Path.of(resourcePath, fileName).toString()
-        val targetFile = dataFolder.resolve(resourcePath)
+        val fullResourcePath = Path.of(resourcePath, fileName).toString()
+        val targetFile = dataFolder.resolve(fullResourcePath)
 
         targetFile.parentFile.mkdirs()
 
         if (!targetFile.exists()) {
-            plugin.getResource(resourcePath)?.use { input ->
+            plugin.getResource(fullResourcePath)?.use { input ->
                 targetFile.writeBytes(input.readBytes())
-            }
+            } ?: plugin.logger.warning("Resource '$fullResourcePath' not found in JAR!")
         }
     }
 
@@ -67,7 +67,7 @@ class FileManager : FileAPI {
             } else {
                 val input = plugin.getResource(fileName)
                     ?: throw IllegalStateException("Resource '$fileName' not found!")
-                input.reader().use { YamlConfiguration.loadConfiguration(file) }
+                input.reader().use { YamlConfiguration.loadConfiguration(it) }
             }
         }
     }
