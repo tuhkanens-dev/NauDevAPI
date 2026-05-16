@@ -6,4 +6,5 @@ interface FileAPI {
     fun saveResource(fileName: String, resourcePath: String)
     fun saveResources(resourcePath: String)
     fun getResource(fileName: String, resourcePath: String): YamlConfiguration
+    fun getResource(fileName: String): YamlConfiguration
 }

@@ -49,13 +49,25 @@ class FileManager : FileAPI {
 
         return fileCache.getOrPut(path) {
             val file = dataFolder.resolve(path)
+            if (file.exists()) {
+                YamlConfiguration.loadConfiguration(file)
+            } else {
+                val input = plugin.getResource(path)
+                    ?: throw IllegalStateException("Resource '$path' not found!")
+                input.reader().use { YamlConfiguration.loadConfiguration(it) }
+            }
+        }
+    }
 
+    override fun getResource(fileName: String): YamlConfiguration {
+        return fileCache.getOrPut(fileName) {
+            val file = dataFolder.resolve(fileName)
             if (file.exists()) {
                 YamlConfiguration.loadConfiguration(file)
             } else {
                 val input = plugin.getResource(fileName)
-                    ?: throw IllegalStateException("Resource '$path' not found!")
-                input.reader().use { YamlConfiguration.loadConfiguration(it) }
+                    ?: throw IllegalStateException("Resource '$fileName' not found!")
+                input.reader().use { YamlConfiguration.loadConfiguration(file) }
             }
         }
     }
