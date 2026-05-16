@@ -12,7 +12,7 @@ import java.util.jar.JarFile
 class FileManager : FileAPI {
 
     private val plugin get() = NauDevAPI.getAPI<InstanceAPI>().getInstance()
-    private val dataFolder = plugin.dataFolder
+    private val dataFolder get() = plugin.dataFolder
 
     private val fileCache = ConcurrentHashMap<String, YamlConfiguration>()
 
