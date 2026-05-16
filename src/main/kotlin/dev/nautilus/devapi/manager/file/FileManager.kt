@@ -1,12 +1,10 @@
 package dev.nautilus.devapi.manager.file
 
 import dev.nautilus.devapi.core.NauDevAPI
-import dev.nautilus.devapi.manager.instance.InstanceManager
 import dev.nautilus.devapi.manager.file.api.FileAPI
 import dev.nautilus.devapi.manager.instance.api.InstanceAPI
 import org.bukkit.configuration.file.YamlConfiguration
 import java.io.File
-import java.nio.file.Path
 import java.util.concurrent.ConcurrentHashMap
 import java.util.jar.JarFile
 
@@ -21,20 +19,25 @@ class FileManager : FileAPI {
         return plugin.javaClass.protectionDomain.codeSource.location.toURI().path
     }
 
-    override fun saveResource(fileName: String, resourcePath: String) {
-        val jarPath = "$resourcePath/$fileName"
-        val targetFile = dataFolder.resolve(jarPath)
+    private fun buildJarPath(fileName: String, resourcePath: String): String {
+        return if (resourcePath.isEmpty()) fileName else "$resourcePath/$fileName"
+    }
 
-        plugin.logger.info("jarPath='$jarPath' targetFile='${targetFile.absolutePath}'")
+    override fun saveResource(fileName: String, resourcePath: String) {
+        val jarPath = buildJarPath(fileName, resourcePath)
+        val targetFile = dataFolder.resolve(jarPath)
 
         targetFile.parentFile.mkdirs()
 
         if (!targetFile.exists()) {
-            plugin.logger.info("Trying getResource('$jarPath')")
             plugin.getResource(jarPath)?.use { input ->
                 targetFile.writeBytes(input.readBytes())
             } ?: plugin.logger.warning("Resource '$jarPath' not found in JAR!")
         }
+    }
+
+    override fun saveResource(fileName: String) {
+        saveResource(fileName, "")
     }
 
     override fun saveResources(resourcePath: String) {
@@ -55,6 +58,16 @@ class FileManager : FileAPI {
         }
     }
 
+    override fun getResource(fileName: String, resourcePath: String): YamlConfiguration {
+        val jarPath = buildJarPath(fileName, resourcePath)
+        val file = dataFolder.resolve(jarPath)
+        return getResourceResolve(file, jarPath)
+    }
+
+    override fun getResource(fileName: String): YamlConfiguration {
+        return getResource(fileName, "")
+    }
+
     private fun getResourceResolve(file: File, jarPath: String): YamlConfiguration {
         return fileCache.getOrPut(jarPath) {
             if (file.exists()) {
@@ -65,18 +78,5 @@ class FileManager : FileAPI {
                 input.reader().use { YamlConfiguration.loadConfiguration(it) }
             }
         }
-    }
-
-    override fun getResource(fileName: String, resourcePath: String): YamlConfiguration {
-        val jarPath = "$resourcePath/$fileName"
-        val file = dataFolder.resolve(jarPath)
-
-        return getResourceResolve(file, jarPath)
-    }
-
-    override fun getResource(fileName: String): YamlConfiguration {
-        val file = dataFolder.resolve(fileName)
-
-        return getResourceResolve(file, fileName)
     }
 }
